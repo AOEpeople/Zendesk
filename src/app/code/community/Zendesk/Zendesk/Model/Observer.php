@@ -19,8 +19,7 @@ class Zendesk_Zendesk_Model_Observer
 {
     public function setHook(Varien_Event_Observer $observer)
     {
-        if (Mage::app()->getFrontController()->getAction()->getFullActionName() === 'adminhtml_dashboard_index')
-        {
+        if ($this->isAdminDashboard()) {
             $block = $observer->getBlock();
             if ($block->getNameInLayout() === 'dashboard')
             {
@@ -31,8 +30,7 @@ class Zendesk_Zendesk_Model_Observer
 
     public function insertBlock(Varien_Event_Observer $observer)
     {
-        if (Mage::app()->getFrontController()->getAction()->getFullActionName() === 'adminhtml_dashboard_index')
-        {
+        if ($this->isAdminDashboard()) {
             if ($observer->getBlock()->getUseAsDashboardHook())
             {
                 $html = $observer->getTransport()->getHtml();
@@ -47,6 +45,16 @@ class Zendesk_Zendesk_Model_Observer
                 $observer->getTransport()->setHtml($html);
             }
         }
+    }
+
+    public function isAdminDashboard()
+    {
+        if (($action = Mage::app()->getFrontController()->getAction())
+            && ($action->getFullActionName() === 'adminhtml_dashboard_index')
+        ) {
+            return true;
+        }
+        return false;
     }
 
     public function saveConfig(Varien_Event_Observer $observer)
