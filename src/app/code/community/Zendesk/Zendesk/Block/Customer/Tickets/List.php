@@ -42,6 +42,10 @@ class Zendesk_Zendesk_Block_Customer_Tickets_List extends Mage_Core_Block_Templa
         return Mage::getSingleton('customer/session');
     }
 
+    public function getTicketUrl($ticket_id)
+    {
+        return Mage::helper('zendesk')->getUrl() . '/requests/' . $ticket_id;
+    }
 
     public function getCustomer()
     {
